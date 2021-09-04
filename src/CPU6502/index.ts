@@ -109,10 +109,4 @@ export default class CPU6502 implements IDevice {
     this._valueRead = null;
     return value;
   }
-
-  describe() {
-    return {
-      a: this._a
-    };
-  }
 }

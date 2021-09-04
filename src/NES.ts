@@ -5,7 +5,7 @@ import CPU from "./CPU6502";
 export default class NES {
   private _dataBus: Bus;
   private _ram: Memory;
-  _cpu: CPU;
+  private _cpu: CPU;
 
   constructor() {
     this._dataBus = new Bus();
@@ -20,7 +20,4 @@ export default class NES {
 }
 
 const nes = new NES();
-
-console.log(nes._cpu.describe());
 for (let i = 0; i < 100; i++) nes.cycle();
-console.log(nes._cpu.describe());
