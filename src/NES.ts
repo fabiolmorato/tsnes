@@ -18,6 +18,3 @@ export default class NES {
     this._cpu.cycle();
   }
 }
-
-const nes = new NES();
-for (let i = 0; i < 100; i++) nes.cycle();
