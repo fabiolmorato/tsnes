@@ -3,6 +3,8 @@
     "sourceMap": true,
     "noImplicitAny": true,
     "target": "ES2017",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "module": "CommonJS",
+    "esModuleInterop": true
   }
 }
