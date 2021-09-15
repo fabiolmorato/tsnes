@@ -9,7 +9,7 @@ export default class NES {
 
   constructor() {
     this._dataBus = new Bus();
-    this._ram = new Memory(this._dataBus, 2 * 1024);
+    this._ram = new Memory(this._dataBus, 64 * 1024);
     this._cpu = new CPU(this._dataBus);
   }
 
