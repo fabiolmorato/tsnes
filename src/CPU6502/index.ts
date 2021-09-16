@@ -601,7 +601,7 @@ export default class CPU6502 implements IDevice {
   }
 
   private* _nop() {
-    // TODO
+    yield* this._stall(2);
   }
 
   private* _beq() {
