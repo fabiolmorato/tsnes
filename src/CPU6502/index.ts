@@ -23,6 +23,7 @@ export default class CPU6502 implements IDevice {
   private _a: number = 0;
   private _x: number = 0;
   private _y: number = 0;
+  private _status: number = 0;
   private _pc: number = 0;
 
   private _instructionLookup: { [key: number]: IInstruction } = null;
@@ -514,7 +515,12 @@ export default class CPU6502 implements IDevice {
   private* _lda() {
     const address = yield* this._addressingMode();
     const value = yield* this._read(address);
+    
     this._a = value;
+
+    this._setNegativeFlag((value & 0x80) === 0x80);
+    this._setZeroFlag(value === 0);
+
     yield* this._stall(4);
   }
 
@@ -578,12 +584,15 @@ export default class CPU6502 implements IDevice {
     // TODO
   }
 
-  // INCOMPLETE
-  // Written to test
   private* _inc() {
     const address = yield* this._addressingMode();
     const value = yield* this._read(address);
-    yield* this._write(address, value + 1);
+    const newValue = (value + 1) & 0xFF;
+
+    this._setNegativeFlag((newValue & 0x80) === 0x80);
+    this._setZeroFlag(newValue === 0);
+
+    yield* this._write(address, newValue);
     yield* this._stall(6);
   }
 
@@ -644,6 +653,30 @@ export default class CPU6502 implements IDevice {
     const value = this._valueRead;
     this._valueRead = null;
     return value;
+  }
+
+  private _setNegativeFlag(value: boolean) {
+    this._setStatusFlag(value, 7);
+  }
+
+  private _setZeroFlag(value: boolean) {
+    this._setStatusFlag(value, 1);
+  }
+
+  private _setStatusFlag(value: boolean, flag: number) {
+    if (value) {
+      this._status = this._setBit(this._status, flag);
+    } else {
+      this._status = this._clearBit(this._status, flag);
+    }
+  }
+
+  private _setBit(value: number, bit: number) {
+    return value | (1 << bit);
+  }
+
+  private _clearBit(value: number, bit: number) {
+    return value & (~(1 << bit));
   }
 
   get pc() {
