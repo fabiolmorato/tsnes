@@ -481,7 +481,9 @@ export default class CPU6502 implements IDevice {
   }
 
   private* _sty() {
-    // TODO
+    const address = yield* this._addressingMode();
+    yield* this._write(address, this._y);
+    yield* this._stall(4);
   }
 
   private* _stx() {
