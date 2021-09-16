@@ -439,7 +439,11 @@ export default class CPU6502 implements IDevice {
   }
 
   private* _jmp() {
-    // TODO
+    const address = yield* this._addressingMode();
+    this._pc = address;
+
+    if (this._addressingMode.name === "bound _absoluteIndirectAddressing") yield* this._stall(5);
+    else yield* this._stall(3);
   }
 
   private* _bvc() {
@@ -667,7 +671,7 @@ export default class CPU6502 implements IDevice {
     this._extraStalls = 0;
 
     if (totalCycles < 0) {
-      console.warn(`Instruction took ${-totalCycles} more cycles than it should!`);
+      console.warn(`Instruction took ${-totalCycles} more cycles than it should! (${stallCycles}, ${totalCycles})`);
       return;
     }
 
