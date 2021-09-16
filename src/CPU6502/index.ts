@@ -568,7 +568,12 @@ export default class CPU6502 implements IDevice {
   }
 
   private* _tax() {
-    // TODO
+    this._x = this._a;
+
+    this._setNegativeFlag((this._x & 0x80) === 0x80);
+    this._setZeroFlag(this._x === 0);
+
+    yield* this._stall(2);
   }
 
   private* _bcs() {
